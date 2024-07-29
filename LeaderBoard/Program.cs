@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 
-builder.Services.AddDbContext<BrandContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("BrandCS")));
+builder.Services.AddDbContext<EmployeesContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("LeaderCS")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
