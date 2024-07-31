@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 
-builder.Services.AddDbContext<EmployeesContext>(options =>
+builder.Services.AddDbContext<LeaderContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("LeaderCS")));
 
 builder.Services.AddControllers();

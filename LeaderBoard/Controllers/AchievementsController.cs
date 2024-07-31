@@ -3,38 +3,37 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
 namespace LeaderBoard.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
+    public class AchievementsController : ControllerBase
     {
-        private readonly LeaderContext _dbContext;
+        private readonly LeaderContext _dbContext1;
 
-        public EmployeesController(LeaderContext dbcontext)
+        public AchievementsController(LeaderContext dbcontext1)
         {
-            _dbContext = dbcontext;
+            _dbContext1 = dbcontext1;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employees>>> GetBrands()
+        public async Task<ActionResult<IEnumerable<Achievements>>> GetBrands()
         {
-            if (_dbContext.Employees == null)
+            if (_dbContext1.Achievements == null)
             {
                 return NotFound();
             }
-            return await _dbContext.Employees.ToListAsync();
+            return await _dbContext1.Achievements.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Employees>> GetBrands(int id)
+        public async Task<ActionResult<Achievements>> GetBrands(int id)
         {
-            if (_dbContext.Employees == null)
+            if (_dbContext1.Achievements == null)
             {
                 return NotFound();
             }
-            var brand = await _dbContext.Employees.FindAsync(id);
+            var brand = await _dbContext1.Achievements.FindAsync(id);
             if (brand == null)
             {
                 return NotFound();
@@ -47,27 +46,27 @@ namespace LeaderBoard.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult<Employees>> PostBrands(Employees brand)
+        public async Task<ActionResult<Achievements>> PostBrands(Achievements brand)
         {
-            _dbContext.Employees.Add(brand);
-            await _dbContext.SaveChangesAsync();
+            _dbContext1.Achievements.Add(brand);
+            await _dbContext1.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetBrands), new { id = brand.Id }, brand);
         }
 
         [HttpPut]
 
-        public async Task<IActionResult> PutBrand(int id, Employees brand)
+        public async Task<IActionResult> PutBrand(int id, Achievements brand)
         {
             if (id != brand.Id)
             {
                 return BadRequest();
             }
-            _dbContext.Entry(brand).State = EntityState.Modified;
+            _dbContext1.Entry(brand).State = EntityState.Modified;
 
             try
             {
-                await _dbContext.SaveChangesAsync();
+                await _dbContext1.SaveChangesAsync();
 
             }
             catch (DbUpdateConcurrencyException)
@@ -86,26 +85,26 @@ namespace LeaderBoard.Controllers
         }
         private bool BrandAvailable(int id)
         {
-            return (_dbContext.Employees?.Any(x => x.Id == id)).GetValueOrDefault();
+            return (_dbContext1.Achievements?.Any(x => x.Id == id)).GetValueOrDefault();
         }
 
         [HttpDelete("{id}")]
 
         public async Task<IActionResult> DeleteBrand(int id)
         {
-            if (_dbContext.Employees == null)
+            if (_dbContext1.Achievements == null)
             {
                 return NotFound();
             }
-            var brand = await _dbContext.Employees.FindAsync(id);
+            var brand = await _dbContext1.Achievements.FindAsync(id);
             if (brand == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Employees.Remove(brand);
+            _dbContext1.Achievements.Remove(brand);
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext1.SaveChangesAsync();
 
             return Ok();
 
