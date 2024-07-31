@@ -1,4 +1,5 @@
 ﻿using LeaderBoard.Models;
+using LeaderBoard.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -110,6 +111,29 @@ namespace LeaderBoard.Controllers
             return Ok();
 
         }
+        [HttpGet("points-ascending")]
+        public async Task<ActionResult<IEnumerable<Employees>>> GetEmployeesByPoints()
+        {
+            var employees = await _dbContext.Employees
+           .Join(
+               _dbContext.Achievements,
+               employee => employee.Id,
+               achievement => achievement.EmployeeId,
+               (employee, achievement) => new EmployeeDto
+               {
+                   Id = employee.Id,
+                   FullName = employee.FullName,
+                   DoB = employee.DoB,
+                   Gender = employee.Gender,
+                   Avatar = employee.Avatar,
+                   Point = achievement.Point
+               }
+           )
+           .OrderBy(e => e.Point) // Order by points in ascending order
+           .ToListAsync();
 
+            return Ok(employees);
+
+        }
     }
 }
