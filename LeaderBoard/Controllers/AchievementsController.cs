@@ -110,5 +110,40 @@ namespace LeaderBoard.Controllers
 
         }
 
+        [HttpPut("{Employeeid}")]
+
+        public async Task<IActionResult> PutBrand1(int Employeeid, Achievements brand)
+        {
+            if (Employeeid != brand.EmployeeId)
+            {
+                return BadRequest();
+            }
+            _dbContext1.Entry(brand).State = EntityState.Modified;
+
+            try
+            {
+                await _dbContext1.SaveChangesAsync();
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BrandAvailable1(Employeeid))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+
+            }
+            return Ok();
+        }
+        private bool BrandAvailable1(int Employeeid)
+        {
+            return (_dbContext1.Achievements?.Any(x => x.EmployeeId == Employeeid)).GetValueOrDefault();
+        }
+
+
     }
 }
